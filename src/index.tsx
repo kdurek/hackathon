@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import App from '@/components/app'
+import App from '@/components/appe'
 import '@/tailwind.css'
 import { UnityProvider } from '@/contexts/unity-context/unity-context'
 

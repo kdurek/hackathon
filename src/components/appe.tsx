@@ -12,25 +12,11 @@ import { Unity } from 'react-unity-webgl'
 //   removeAllBears: () => set({ bears: 0 })
 // }))
 
-function App() {
-  const unity = useUnity()
-
-  const { unityProvider } = unity
-
+export const useSocket = () => {
   const [isConnected, setIsConnected] = useState(socket.connected)
 
   useEffect(() => {
-    function onWeb(data) {
-      console.log('🚀 > onWeb > data:', data)
-    }
-
-    function onUnity(data) {
-      console.log('🚀 > onUnity > data:', data)
-    }
-
-    function onConnect(data) {
-      console.log('🚀 > onConnect > data:', data)
-
+    function onConnect() {
       setIsConnected(true)
     }
 
@@ -38,22 +24,29 @@ function App() {
       setIsConnected(false)
     }
 
-    socket.on('web_event', (data) => onWeb(data))
-    socket.on('unity_event', (data) => onUnity(data))
-    socket.on('connect', (data) => onConnect(data))
+    socket.on('connect', onConnect)
     socket.on('disconnect', onDisconnect)
 
     return () => {
-      socket.off('web_event', onWeb)
-      socket.off('unity_event', onUnity)
       socket.off('connect', onConnect)
       socket.off('disconnect', onDisconnect)
     }
   }, [])
 
   const sendEvent = () => {
-    socket.emit('web_event', 'Hello Unity Piotrulo')
+    socket.emit('web_head', 'Hello Unity Piotrulo')
   }
+
+  return {
+    isConnected,
+    sendEvent
+  }
+}
+
+function App() {
+  const unity = useUnity()
+
+  const { unityProvider } = unity
 
   return (
     <div className="relative">
@@ -62,7 +55,7 @@ function App() {
         className="size-full"
         // style={{ width: 960, height: 600 }}
       />
-      <Overlay isConnected={isConnected} onSendEvent={sendEvent} />
+      <Overlay />
     </div>
   )
 }

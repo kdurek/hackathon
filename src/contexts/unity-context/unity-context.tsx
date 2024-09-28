@@ -1,4 +1,5 @@
-import { createContext, useContext } from 'react'
+import { socket } from '@/lib/socket'
+import { createContext, useContext, useEffect } from 'react'
 import { useUnityContext } from 'react-unity-webgl'
 
 export const UnityContext = createContext<ReturnType<
@@ -24,6 +25,18 @@ export function UnityProvider({ children }: UnityProviderProps) {
     frameworkUrl: 'Build/HackBuild.framework.js.gz',
     codeUrl: 'Build/HackBuild.wasm.gz'
   })
+
+  useEffect(() => {
+    function onHead(data) {
+      context.sendMessage('PlayerConnector', 'SetHead', data)
+    }
+
+    socket.on('web_head', (data) => onHead(data))
+
+    return () => {
+      socket.off('web_head', onHead)
+    }
+  }, [context])
 
   return (
     <UnityContext.Provider value={context}>{children}</UnityContext.Provider>
