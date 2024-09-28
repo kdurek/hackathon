@@ -21,7 +21,12 @@ export function Overlay() {
           <Button onClick={onClickRight}>Right</Button>
         </div>
       </div>
-      <div className="absolute inset-y-0 right-0 h-5/6 w-40 bg-green-500">
+
+      <div className="absolute inset-y-0 left-0 my-auto h-[90%] w-80 rounded-r-md bg-red-500 p-4">
+        Left
+      </div>
+
+      <div className="absolute inset-y-0 right-0 my-auto h-[90%] w-80 rounded-l-md bg-green-500 p-4">
         Right
       </div>
     </>
