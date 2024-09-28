@@ -64,3 +64,13 @@
     @apply bg-background text-foreground;
   }
 }
+@layer components {
+  .card-gradient {
+    background: rgb(254, 83, 187);
+    background: linear-gradient(
+      129deg,
+      rgba(254, 83, 187, 1) 0%,
+      rgba(9, 251, 211, 1) 100%
+    );
+  }
+}

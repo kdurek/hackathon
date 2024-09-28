@@ -1,19 +1,46 @@
+import { ObstaclePanel } from '@/components/obstacles/panel'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import { useUnity } from '@/contexts/unity-context/unity-context'
 import { useSocket } from '@/hooks/useSocket'
+import { socket } from '@/lib/socket'
+import { useEffect } from 'react'
 
 export function Overlay() {
-  const { sendMessage } = useUnity()
-  const { isConnected, sendTestEvent, connect, disconnect } = useSocket()
+  const { isLoaded, sendMessage } = useUnity()
+  const { isConnected, connect, disconnect, createObstacle, removeObstacle } =
+    useSocket()
+
+  const onStart = () => {
+    socket.emit('unity_start', '')
+    setTimeout(() => {
+      sendMessage('Platform', 'RestartGame')
+    }, 500)
+  }
 
   const onClickLeft = () => {
     sendMessage('Platform', 'Left')
+    socket.emit('unity_left', '')
   }
 
   const onClickRight = () => {
     sendMessage('Platform', 'Right')
+    socket.emit('unity_right', '')
   }
+
+  useEffect(() => {
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        onClickRight()
+      }
+      if (e.key === 'ArrowRight') {
+        onClickLeft()
+      }
+    })
+
+    return () => {
+      document.removeEventListener('keydown', () => {})
+    }
+  }, [isLoaded])
 
   return (
     <>
@@ -26,24 +53,23 @@ export function Overlay() {
         </div>
 
         <div className="absolute bottom-0 flex items-center justify-center gap-4 p-4">
-          <Button onClick={onClickLeft}>Left</Button>
-          <Button onClick={onClickRight}>Right</Button>
-          <Button onClick={sendTestEvent}>Send Event</Button>
+          <Button onClick={onStart}>Start</Button>
+          <Button onClick={onClickRight}>Left</Button>
+          <Button onClick={onClickLeft}>Right</Button>
+          <Button onClick={createObstacle}>Create Obstacle</Button>
+          <Button onClick={removeObstacle}>Remove Obstacle</Button>
           <Button onClick={connect}>Connect</Button>
           <Button onClick={disconnect}>Disconnect</Button>
         </div>
       </div>
 
-      <div className="absolute inset-y-0 left-0 my-auto h-[90%] w-80 rounded-r-md  p-4">
-        {/* <div className="h-[504px] w-[287px] rounded border border-[#e8e8e8] bg-[#d9d9d9]/60 backdrop-blur-[23px]">
-          card
-        </div> */}
-        <Card>card</Card>
+      <div className="absolute inset-y-0 left-0 my-auto h-[90%] w-80 rounded-r-md">
+        <ObstaclePanel />
       </div>
 
-      <div className="absolute inset-y-0 right-0 my-auto h-[90%] w-80 rounded-l-md bg-green-500 p-4">
+      {/* <div className="absolute inset-y-0 right-0 my-auto h-[90%] w-80 rounded-l-md bg-green-500 p-4">
         Right
-      </div>
+      </div> */}
     </>
   )
 }
