@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { Unity, useUnityContext } from 'react-unity-webgl'
 
 function App() {
@@ -25,9 +26,9 @@ function App() {
       />
       <div className="absolute inset-0 flex size-full flex-col items-center justify-center p-3">
         Overlay
-        <div className="flex content-between items-center p-4">
-          <button onClick={onClickLeft}>Left</button>
-          <button onClick={onClickRight}>Right</button>
+        <div className="flex w-full items-center justify-between p-4">
+          <Button onClick={onClickLeft}>Left</Button>
+          <Button onClick={onClickRight}>Right</Button>
         </div>
       </div>
     </div>
