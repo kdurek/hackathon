@@ -30,11 +30,21 @@ export function UnityProvider({ children }: UnityProviderProps) {
     function onHead(data) {
       context.sendMessage('PlayerConnector', 'SetHead', data)
     }
+    function onLeftHand(data) {
+      context.sendMessage('PlayerConnector', 'SetLeftHand', data)
+    }
+    function onRightHand(data) {
+      context.sendMessage('PlayerConnector', 'SetRightHand', data)
+    }
 
     socket.on('web_head', (data) => onHead(data))
+    socket.on('web_left_hand', (data) => onLeftHand(data))
+    socket.on('web_right_hand', (data) => onRightHand(data))
 
     return () => {
       socket.off('web_head', onHead)
+      socket.off('web_left_hand', onLeftHand)
+      socket.off('web_right_hand', onRightHand)
     }
   }, [context])
 

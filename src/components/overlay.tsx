@@ -1,11 +1,11 @@
-import { useSocket } from '@/components/appe'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { useUnity } from '@/contexts/unity-context/unity-context'
+import { useSocket } from '@/hooks/useSocket'
 
 export function Overlay() {
   const { sendMessage } = useUnity()
-  const { isConnected, sendEvent } = useSocket()
+  const { isConnected, sendTestEvent, connect, disconnect } = useSocket()
 
   const onClickLeft = () => {
     sendMessage('Platform', 'Left')
@@ -28,7 +28,9 @@ export function Overlay() {
         <div className="absolute bottom-0 flex items-center justify-center gap-4 p-4">
           <Button onClick={onClickLeft}>Left</Button>
           <Button onClick={onClickRight}>Right</Button>
-          <Button onClick={sendEvent}>Send Event</Button>
+          <Button onClick={sendTestEvent}>Send Event</Button>
+          <Button onClick={connect}>Connect</Button>
+          <Button onClick={disconnect}>Disconnect</Button>
         </div>
       </div>
 
