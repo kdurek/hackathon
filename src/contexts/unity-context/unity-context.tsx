@@ -19,7 +19,7 @@ type UnityProviderProps = {
 }
 
 export function UnityProvider({ children }: UnityProviderProps) {
-  const context = useUnityContext({
+  const unityInstance = useUnityContext({
     loaderUrl: 'Build/HackBuild.loader.js',
     dataUrl: 'Build/HackBuild.data.gz',
     frameworkUrl: 'Build/HackBuild.framework.js.gz',
@@ -28,27 +28,34 @@ export function UnityProvider({ children }: UnityProviderProps) {
 
   useEffect(() => {
     function onHead(data) {
-      context.sendMessage('PlayerConnector', 'SetHead', data)
+      console.log('onHead: ', data)
+      unityInstance.sendMessage('PlayerConnector', 'SetHead', data)
     }
     function onLeftHand(data) {
-      context.sendMessage('PlayerConnector', 'SetLeftHand', data)
+      console.log('onLeftHand: ', data)
+      unityInstance.sendMessage('PlayerConnector', 'SetLeftHand', data)
     }
     function onRightHand(data) {
-      context.sendMessage('PlayerConnector', 'SetRightHand', data)
+      console.log('onRightHand: ', data)
+      unityInstance.sendMessage('PlayerConnector', 'SetRightHand', data)
     }
 
-    socket.on('web_head', (data) => onHead(data))
-    socket.on('web_left_hand', (data) => onLeftHand(data))
-    socket.on('web_right_hand', (data) => onRightHand(data))
+    if (unityInstance.isLoaded) {
+      socket.on('web_head', onHead)
+      socket.on('web_left_hand', onLeftHand)
+      socket.on('web_right_hand', onRightHand)
+    }
 
     return () => {
       socket.off('web_head', onHead)
       socket.off('web_left_hand', onLeftHand)
       socket.off('web_right_hand', onRightHand)
     }
-  }, [context])
+  }, [unityInstance.isLoaded])
 
   return (
-    <UnityContext.Provider value={context}>{children}</UnityContext.Provider>
+    <UnityContext.Provider value={unityInstance}>
+      {children}
+    </UnityContext.Provider>
   )
 }

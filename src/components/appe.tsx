@@ -11,9 +11,7 @@ import { Unity } from 'react-unity-webgl'
 // }))
 
 function App() {
-  const unity = useUnity()
-
-  const { unityProvider } = unity
+  const { unityProvider } = useUnity()
 
   return (
     <div className="relative">
