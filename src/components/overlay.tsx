@@ -4,6 +4,7 @@ import { useUnity } from '@/contexts/unity-context/unity-context'
 import { useSocket } from '@/hooks/useSocket'
 import { socket } from '@/lib/socket'
 import { useEffect } from 'react'
+import { PuzzlePanel } from './puzzles/panel'
 
 export function Overlay() {
   const { isLoaded, sendMessage } = useUnity()
@@ -69,9 +70,9 @@ export function Overlay() {
         <ObstaclePanel />
       </div>
 
-      {/* <div className="absolute inset-y-0 right-0 my-auto h-[90%] w-80 rounded-l-md bg-green-500 p-4">
-        Right
-      </div> */}
+      <div className="absolute inset-y-0 right-0 my-auto h-[90%] w-80 rounded-l-md p-4">
+        <PuzzlePanel />
+      </div>
     </>
   )
 }
