@@ -28,17 +28,19 @@ export function Overlay() {
   }
 
   useEffect(() => {
-    document.addEventListener('keydown', (e: KeyboardEvent) => {
+    const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
         onClickRight()
       }
       if (e.key === 'ArrowRight') {
         onClickLeft()
       }
-    })
+    }
+
+    document.addEventListener('keydown', onKeyDown)
 
     return () => {
-      document.removeEventListener('keydown', () => {})
+      document.removeEventListener('keydown', onKeyDown)
     }
   }, [isLoaded])
 
@@ -53,7 +55,7 @@ export function Overlay() {
         </div>
 
         <div className="absolute bottom-0 flex items-center justify-center gap-4 p-4">
-          <Button onClick={onStart}>Start</Button>
+          <Button onClick={onStart}>Restart</Button>
           <Button onClick={onClickRight}>Left</Button>
           <Button onClick={onClickLeft}>Right</Button>
           <Button onClick={createObstacle}>Create Obstacle</Button>
